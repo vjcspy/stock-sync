@@ -30,7 +30,7 @@ export const loginCookies = async () => {
     const cookiesAfterLogin = parseCookies(res);
 
     return {
-      cookies: cookiesAfterLogin,
+      cookies: cookies + '; ' + cookiesAfterLogin,
     };
   } catch (e) {
     console.log('login error');
@@ -39,7 +39,7 @@ export const loginCookies = async () => {
   return {};
 };
 
-export const retrieveCookiesAndCsrf = async (cookiesData?:any) => {
+export const retrieveCookiesAndCsrf = async (cookiesData?: any, needCookie = true) => {
   try {
     const res = await fetch('https://finance.vietstock.vn/doanh-nghiep-a-z/danh-sach-niem-yet?page=1', {
       'headers': {
@@ -66,7 +66,10 @@ export const retrieveCookiesAndCsrf = async (cookiesData?:any) => {
     const htmlParsed: any = parse(text);
     const input = htmlParsed.querySelector('[name=__RequestVerificationToken]');
     const csrf = input.getAttribute('value');
-    const cookies = parseCookies(res);
+    let cookies;
+    if (needCookie) {
+      cookies = parseCookies(res);
+    }
 
     return {
       csrf,
