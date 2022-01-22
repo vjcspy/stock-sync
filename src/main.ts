@@ -1,3 +1,4 @@
-import { getCorporate } from './requests/vietstock/corporate';
+import "reflect-metadata";
+import { getCorporate } from './workers/get-corporate';
 
-getCorporate()
+getCorporate();

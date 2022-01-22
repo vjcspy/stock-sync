@@ -2,14 +2,16 @@ import { parse } from 'node-html-parser';
 import { parseCookies } from '../../utils/parseCookies';
 import fetch from 'node-fetch';
 
+export interface VietStockCredentialsInterface {
+  sid: string;
+  rvt: string;
+  vtsUsrLg: string;
+  usrTk: string;
+  csrf: string;
+}
+
 export class VietStockCredentials {
-  protected _cachedCredentials: {
-    sid: string;
-    rvt: string;
-    vtsUsrLg: string;
-    usrTk: string;
-    csrf: string
-  };
+  protected _cachedCredentials: VietStockCredentialsInterface;
 
   public async retrieveCredentials() {
     if (typeof this._cachedCredentials === 'undefined') {
