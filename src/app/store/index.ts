@@ -1,5 +1,5 @@
 import { configureStore, createReducer } from '@reduxjs/toolkit';
-import { createStoreManager } from '@util/createStoreManager';
+import { createStoreManager } from '@app/store/createStoreManager';
 
 export const storeManager = createStoreManager(
   {
