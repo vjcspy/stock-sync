@@ -1,5 +1,3 @@
-// import logger from 'redux-logger';
-import forEach from 'lodash/forEach';
 import { combineReducers, Reducer, ReducersMapObject } from 'redux';
 import {
   combineEpics,
@@ -13,7 +11,7 @@ import logger from 'redux-logger';
 let epic$: any;
 let rootEpic: any;
 let rootMiddleware: any[] = [
-  logger
+  logger,
 ];
 // An array which is used to delete state keys when reducers are removed
 let keysToRemove: string[] = [];
@@ -93,12 +91,14 @@ export function createStoreManager(
     },
 
     mergeReducers: (objectReducer: any) => {
-      forEach(objectReducer, (reducer, key) => {
+      Object.entries(objectReducer).forEach(([key, reducer]) => {
         if (!key || reducers[key]) {
           return;
         }
 
         // Add the reducer to the reducer mapping
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         reducers[key] = reducer;
 
         // Generate a new combined reducer

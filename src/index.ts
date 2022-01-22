@@ -1,1 +1,1 @@
-import './workers/get-corporate';
+import './workers/sync-cor/index';
