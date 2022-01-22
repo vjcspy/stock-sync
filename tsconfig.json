@@ -23,7 +23,19 @@
       "es5",
       "es6"
     ],
-    "outDir": "./build"
+    "baseUrl": ".",
+    "paths": {
+      "@app/store": [
+        "src/app/store/*"
+      ],
+      "@util/*": [
+        "src/utils/*"
+      ]
+    },
+    "outDir": "./build",
+    "plugins": [
+      { "transform": "ts-transformer-imports" }
+    ]
   },
   "include": [
     "src/**/*",
