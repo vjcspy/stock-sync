@@ -11,7 +11,10 @@
   },
   "plugins": [
     "@typescript-eslint",
-    "jest"
+    "jest",
+    "prettier",
+    "simple-import-sort",
+    "import"
   ],
   "extends": [
     "eslint:recommended",

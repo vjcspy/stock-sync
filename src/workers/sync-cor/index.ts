@@ -33,7 +33,7 @@ storeManager.addEpics('sync-cor',[...syncCorEffects])
 
 class SyncCor extends AbstractApplication {
   protected async main(): Promise<void> {
-    console.log('run get corporate');
+    console.log('run sync corporate');
     return Promise.resolve(undefined);
   }
 }

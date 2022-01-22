@@ -16,6 +16,7 @@ export function createAction<P, T extends string = string>(
 }
 
 export function generateAction<
+  // eslint-disable-next-line @typescript-eslint/ban-types
   ActionPayload = {},
   AfterPayload = { data: any },
   ErrorPayload = { error: any },
