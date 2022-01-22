@@ -1,5 +1,6 @@
 import { VietStockCrds, VietStockCredentialsInterface } from '../requests/vietstock/credentials';
 import { retrieveCor } from '../requests/vietstock/corporate';
+import { AbstractApplication } from '../app/abstract-application';
 
 export const getCorporate = async (vsCreds?: VietStockCredentialsInterface) => {
   if (typeof vsCreds === 'undefined') {
@@ -20,3 +21,13 @@ export const getCorporate = async (vsCreds?: VietStockCredentialsInterface) => {
 
   getCor(currentPage);
 };
+
+class GetCorporate extends AbstractApplication{
+  protected async main(): Promise<void> {
+    console.log('run get corporate');
+    return Promise.resolve(undefined);
+  }
+}
+
+const _i = new GetCorporate();
+_i.run();

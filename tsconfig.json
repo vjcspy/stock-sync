@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es6",
+    "target": "es5",
     "module": "commonjs",
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
@@ -19,7 +19,11 @@
     "strictNullChecks": false,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "lib": ["ES6"]
+    "lib": [
+      "es5",
+      "es6"
+    ],
+    "outDir": "./build"
   },
   "include": [
     "src/**/*",
