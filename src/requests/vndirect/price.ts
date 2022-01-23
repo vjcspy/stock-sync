@@ -1,6 +1,6 @@
 import fetch from 'node-fetch';
 
-export const getPricePage = async (code: string, year: number, page = 1) => {
+export const getPrice = async (code: string, year: number, page = 1) => {
   const res = await fetch(`https://finfo-api.vndirect.com.vn/v4/stock_prices?sort=date&q=code:${code}~date:gte:${year}-01-01~date:lte:${year}-12-31&size=1000&page=${page}`, {
     'headers': {
       'accept': '*/*',
@@ -23,6 +23,17 @@ export const getPricePage = async (code: string, year: number, page = 1) => {
 
   const text = await res.text();
   const data = JSON.parse(text);
-  console.log(data);
-  return data;
+  if (Array.isArray(data?.data)) {
+    const sortedData = data.data.sort(function(a, b) {
+      return new Date(a['date']) > new Date(b['date']) ? 1 : -1;
+    });
+
+    return {
+      data: sortedData,
+      currentPage: data?.currentPage,
+      totalPage: data?.totalPage,
+    };
+  } else {
+    return null;
+  }
 };

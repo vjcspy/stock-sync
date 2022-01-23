@@ -1,17 +1,18 @@
 import { Entity, PrimaryGeneratedColumn, Column, Unique } from 'typeorm';
 
 @Entity()
-@Unique(['code', 'date'])
+@Unique(['code', 'lastDate'])
 export class StockPriceSyncStatus {
+
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ unique: true })
   code: string;
 
   @Column({
     type: 'date',
     nullable: false,
   })
-  last_date: Date;
+  lastDate: Date;
 }

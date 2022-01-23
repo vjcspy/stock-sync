@@ -1,4 +1,4 @@
 // import './workers/sync-cor/index';
-import { getPricePage } from '@requests/vndirect/price';
+import { syncStock } from './workers/stock-prices/sync';
 
-getPricePage('VNM',2016);
+syncStock();
