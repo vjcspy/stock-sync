@@ -8,7 +8,7 @@ export abstract class AbstractApplication {
 
   constructor() {
     AbstractApplication._c++;
-    if(AbstractApplication._c> 1){
+    if (AbstractApplication._c > 1) {
       throw new Error('Must have only one application');
     }
   }
@@ -26,11 +26,15 @@ export abstract class AbstractApplication {
   }
 
   protected async __connectDB() {
-    return await createConnection();
+    return new Promise((resolve, reject) => {
+      createConnection().then(connection => {
+        resolve(connection);
+      }).catch(e => reject(e));
+    });
   }
 
-  protected async __configStore(){
-    store.dispatch(appInitAction())
+  protected async __configStore() {
+    store.dispatch(appInitAction());
   }
 
 }

@@ -1,8 +1,9 @@
 import { createReducer } from '@reduxjs/toolkit';
 import { SyncCorStateFactory } from './sync-cor.state';
-import { appInitAction } from '@app/store/actions';
+import { corGetNextPageAfterAction } from './sync-cor.actions';
 
 export const syncCorReducer = createReducer(SyncCorStateFactory(), builder => {
-  builder.addCase(appInitAction, () => {
+  builder.addCase(corGetNextPageAfterAction, (state) => {
+    state.page = state.page + 1;
   });
 });
