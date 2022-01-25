@@ -24,15 +24,19 @@ export const getPrice = async (code: string, year: number, page = 1) => {
   const text = await res.text();
   const data = JSON.parse(text);
   if (Array.isArray(data?.data)) {
-    const sortedData = data.data.sort(function(a, b) {
-      return new Date(a['date']) > new Date(b['date']) ? 1 : -1;
-    });
+    if (data.data.length > 0) {
+      const sortedData = data.data.sort(function(a, b) {
+        return new Date(a['date']) > new Date(b['date']) ? 1 : -1;
+      });
+      return {
+        ...data, data: sortedData,
+      };
+    }
 
     return {
-      data: sortedData,
-      currentPage: data?.currentPage,
-      totalPage: data?.totalPage,
+      ...data,
     };
+
   } else {
     return null;
   }

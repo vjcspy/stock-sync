@@ -6,7 +6,7 @@ import { StockPriceSyncStatus } from '@entity/StockPriceSyncStatus';
 const _ = require('lodash');
 
 export const savePrices = async (code: string, priceData: any) => {
-  let syncSuccess = false;
+  let syncSuccess: any = false;
 
   const connection = getConnection();
   const queryRunner = connection.createQueryRunner();
@@ -33,6 +33,7 @@ export const savePrices = async (code: string, priceData: any) => {
     console.log('sync success code: ' + code + ' year: ' + last.date);
     syncSuccess = true;
   } catch (e) {
+    syncSuccess = e;
     console.error(e);
     // since we have errors let's rollback changes we made
     await queryRunner.rollbackTransaction();

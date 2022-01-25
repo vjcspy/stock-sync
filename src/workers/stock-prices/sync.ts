@@ -1,47 +1,41 @@
 import { AbstractApplication } from '@app/abstract-application';
-import { getCurrentStatus } from './fns/getCurrentStatus';
-import { getPrice } from '@requests/vndirect/price';
-import { savePrices } from './fns/savePrices';
-import * as moment from 'moment';
+import { store, storeManager } from '@app/store';
+import { stockPricesEffects } from './stock-prices.effects';
+import { stockPricesStartAction } from './stock-prices.actions';
+import { stockPriceReducer } from './stock-price.reducer';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const _ = require('lodash');
-
-const _sync = async (code: string) => {
-  try {
-    const currentStatus = await getCurrentStatus(code);
-
-    if (currentStatus) {
-      const lastDate = moment(currentStatus.lastDate);
-      if (lastDate.year() < moment().year()) {
-        const priceData = await getPrice(code, lastDate.year() + 1);
-        await savePrices(code, priceData);
-        await _sync(code);
-      } else {
-        const priceData = await getPrice(code, lastDate.year());
-        const priceFiltered = _.filter(priceData.data, (p: any) => moment(p['date']).isAfter(lastDate));
-
-        if (priceFiltered.length > 0) {
-          await savePrices(code, { data: priceFiltered });
-        }
-
-        return;
-      }
-    } else {
-      const priceData = await getPrice(code, 2016);
-      await savePrices(code, priceData);
-      await _sync(code);
-    }
-  } catch (e) {
-    console.log('error', e);
-  }
-
-};
+const amqp = require('amqplib/callback_api');
+storeManager.mergeReducers({
+  stockPrice: stockPriceReducer,
+});
+storeManager.addEpics('stock_prices', [...stockPricesEffects]);
 
 class SyncStock extends AbstractApplication {
   protected async main(): Promise<void> {
-    _sync('VNM');
-    return Promise.resolve(undefined);
+    amqp.connect('amqp://vm', async (error0, connection) => {
+      if (error0) {
+        throw error0;
+      }
+      const queue = 'stock_prices_queue';
+      const channel = await connection.createChannel();
+
+      await channel.assertQueue(queue, {
+        durable: true,
+      });
+      await channel.prefetch(1);
+      console.log(' [*] Waiting for messages in %s. To exit press CTRL+C', queue);
+      await channel.consume(queue, async msg => {
+        store.dispatch(stockPricesStartAction({
+          code: msg.content.toString(),
+        }));
+
+      }, {
+        // manual acknowledgment mode,
+        // see ../confirms.html for details
+        noAck: false,
+      });
+    });
   }
 }
 

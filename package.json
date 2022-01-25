@@ -32,7 +32,7 @@
     "clean": "rimraf coverage build tmp",
     "prebuild": "npm run lint",
     "build": "ttsc -p tsconfig.release.json",
-    "build:watch": "ttsc -w -p tsconfig.release.json",
+    "watch": "ttsc -w -p tsconfig.release.json",
     "lint": "eslint . --ext .ts,.tsx",
     "test": "jest --coverage",
     "test:watch": "jest --watch"
