@@ -39,9 +39,10 @@ const syncPrice = async (code: string) => {
         if (year === moment().year()) {
           // nếu dữ liệu là năm hiện tại thì chỉ lấy những ngày năm sau lastDate
           let _savePrices: any[] = priceData.data;
-          const lastDate = moment(currentStatus.lastDate);
-          _savePrices = _savePrices.filter((p: any) => lastDate.isBefore(moment(p['date'], 'YYYY-MM-DD')));
-
+          if(currentStatus){
+            const lastDate = moment(currentStatus.lastDate);
+            _savePrices = _savePrices.filter((p: any) => lastDate.isBefore(moment(p['date'], 'YYYY-MM-DD')));
+          }
           if (_savePrices.length === 0) {
             console.log(`[${code}] finished because not have newer data`);
             return true;
