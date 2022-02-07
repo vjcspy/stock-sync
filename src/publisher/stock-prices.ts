@@ -2,6 +2,7 @@ import { AbstractApplication } from '@app/abstract-application';
 import { getRepository } from 'typeorm';
 import { Cor } from '@entity/Cor';
 import * as _ from 'lodash';
+import {CFG} from "../values/CFG";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const amqp = require('amqplib/callback_api');
 
@@ -9,7 +10,7 @@ const amqp = require('amqplib/callback_api');
 export class StockPricesPublisher extends AbstractApplication {
   protected async main(): Promise<void> {
     return new Promise(() => {
-      amqp.connect('amqp://vm', async (error0, connection) => {
+      amqp.connect(CFG.RABBITMQ_HOST, async (error0, connection) => {
         if (error0) {
           throw error0;
         }

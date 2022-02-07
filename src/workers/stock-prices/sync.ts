@@ -7,6 +7,7 @@ import { getPrice } from '@requests/vndirect/price';
 import { StockPricesValues } from './stock-prices.values';
 import * as moment from 'moment';
 import { savePrices } from './fns/savePrices';
+import {CFG} from "../../values/CFG";
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const amqp = require('amqplib/callback_api');
@@ -75,7 +76,7 @@ const syncPrice = async (code: string) => {
 
 class SyncStock extends AbstractApplication {
   protected async main(): Promise<void> {
-    amqp.connect('amqp://vm', async (error0, connection) => {
+    amqp.connect(CFG.RABBITMQ_HOST, async (error0, connection) => {
       if (error0) {
         throw error0;
       }
