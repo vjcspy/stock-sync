@@ -8,6 +8,8 @@ export class StockPrice {
 
   @Column({
     nullable: false,
+    type: 'varchar',
+    length: '10'
   })
   code: string;
 

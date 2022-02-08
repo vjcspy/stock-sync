@@ -27,6 +27,7 @@
     "@typescript-eslint/no-explicit-any": 0,
     "jest/no-export": 0,
     "@typescript-eslint/no-empty-function": 0,
-    "no-empty": 0
+    "no-empty": 0,
+    "@typescript-eslint/no-empty-interface": 0
   }
 }

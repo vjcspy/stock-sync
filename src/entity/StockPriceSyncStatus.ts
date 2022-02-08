@@ -7,7 +7,12 @@ export class StockPriceSyncStatus {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ unique: true })
+  @Column({
+    nullable: false,
+    type: 'varchar',
+    length: '10',
+    unique:true
+  })
   code: string;
 
   @Column({

@@ -1,4 +1,3 @@
-// import './workers/sync-cor/index';
-import { syncStock } from './workers/stock-prices/sync';
+import {retrieveFinanceInfo} from "@requests/vietstock/financeInfo";
 
-syncStock();
+retrieveFinanceInfo('BFC',1,1)
