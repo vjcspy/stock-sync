@@ -1,9 +1,8 @@
-import {Entity, PrimaryGeneratedColumn, Column, Unique} from 'typeorm';
+import {Column, Entity, PrimaryGeneratedColumn, Unique} from 'typeorm';
 
 @Entity()
 @Unique(['code', 'termType'])
 export class FinancialIndicatorStatus {
-
     @PrimaryGeneratedColumn()
     id: number;
 
@@ -11,7 +10,7 @@ export class FinancialIndicatorStatus {
         nullable: false,
         type: 'varchar',
         length: '10',
-        unique: true
+        unique: true,
     })
     code: string;
 
@@ -34,5 +33,4 @@ export class FinancialIndicatorStatus {
         nullable: true,
     })
     quarter: string;
-
 }
