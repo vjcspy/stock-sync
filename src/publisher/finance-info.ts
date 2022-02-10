@@ -6,12 +6,11 @@ import {getRepository} from 'typeorm';
 
 import {FinanceInfoValues} from '../workers/finance-info/finance-info.values';
 
-const ROUTING_KEY = 'finance-info.*';
 class FinanceInfoPublisher extends AbstractApplication {
     protected main(): Promise<void> {
         return queueChannelWrapper(async (channel) => {
             channel.assertExchange(FinanceInfoValues.QUEUE_EXCHANGE, 'topic', {
-                durable: false,
+                durable: true,
             });
 
             const corRepo = getRepository(Cor);
@@ -19,7 +18,7 @@ class FinanceInfoPublisher extends AbstractApplication {
             _.forEach(cors, (c) => {
                 channel.publish(
                     FinanceInfoValues.QUEUE_EXCHANGE,
-                    ROUTING_KEY,
+                    FinanceInfoValues.QUEUE_ROUTING_KEY,
                     Buffer.from(c.code),
                 );
                 console.log(" [x] FINANCE_INFO sent '%s'", c.code);

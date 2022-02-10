@@ -1,4 +1,5 @@
-import amqp, {Channel, Message} from 'amqplib/callback_api';
+import {Channel, Message} from 'amqplib/callback_api';
+import * as amqp from 'amqplib/callback_api';
 
 import {CFG} from '../values/CFG';
 
@@ -12,7 +13,7 @@ export const topicMessageConsume = async (
         if (error0) {
             throw error0;
         }
-        connection.createChannel((error1, channel) => {
+        connection.createChannel(async (error1, channel) => {
             if (error1) {
                 throw error1;
             }
@@ -20,7 +21,7 @@ export const topicMessageConsume = async (
             channel.assertExchange(exchange, 'topic', {
                 durable: true,
             });
-
+            channel.prefetch(1);
             channel.assertQueue(
                 queue,
                 {

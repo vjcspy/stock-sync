@@ -1,12 +1,12 @@
-import {VietStockCredentialsInterface} from '@requests/vietstock/credentials';
+import {VietStockCrds} from '@requests/vietstock/credentials';
 import fetch from 'node-fetch';
 
 export const retrieveFinanceInfo = async (
     code: string,
     termType: number,
     page: number,
-    vsCreds: VietStockCredentialsInterface,
 ) => {
+    const vsCreds = await VietStockCrds.retrieveCredentials();
     const {sid, rvt, vtsUsrLg, usrTk, csrf} = vsCreds;
     try {
         const res = await fetch(
@@ -35,7 +35,8 @@ export const retrieveFinanceInfo = async (
             },
         );
 
-        return await res.text();
+        const text = await res.text();
+        return JSON.parse(text);
     } catch (e) {
         console.error('could not get finance info', e);
         return null;

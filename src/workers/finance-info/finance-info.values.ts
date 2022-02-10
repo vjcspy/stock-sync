@@ -1,5 +1,7 @@
 export class FinanceInfoValues {
+    static CHANNEL_INSTANCE = 'syncs.finance_info.CHANNEL_INSTANCE';
     static QUEUE_EXCHANGE = 'syncs.finance_info';
-    static QUEUE_SYNC_YEAR = 'finance-info.queue.sync-year';
-    static QUEUE_SYNC_QUARTER = 'finance-info.queue.sync-quarter';
+    static QUEUE_ROUTING_KEY = 'syncs.finance_info.stock.code';
+    static QUEUE_SYNC_YEAR = 'sync.finance-info.queue.stock.code.year';
+    static QUEUE_SYNC_QUARTER = 'sync.finance-info.queue.stock.code.quarter';
 }
