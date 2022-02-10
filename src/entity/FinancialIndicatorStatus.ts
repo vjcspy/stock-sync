@@ -33,4 +33,10 @@ export class FinancialIndicatorStatus {
         nullable: true,
     })
     quarter: string;
+
+    @Column({
+        type: 'text',
+        nullable: true,
+    })
+    error: string;
 }

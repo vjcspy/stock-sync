@@ -28,6 +28,7 @@ import {
 } from './finance-info.actions';
 import {FinanceInfoState} from './finance-info.reducer';
 import {getFinanceInfoStatus} from './fns/getFinanceInfoStatus';
+import {saveErrorFinanceInfoStatus} from './fns/saveErrorFinanceInfoStatus';
 import {saveFinanceInfo} from './fns/saveFinaceInfo';
 
 const whenStartSync$ = createEffect((action$) => {
@@ -210,10 +211,36 @@ const whenFinish$ = createEffect((action$, state$) =>
     ),
 );
 
+const whenRequestError$ = createEffect((action$, state$) =>
+    action$.pipe(
+        ofType(requestFinanceInfoErrorAction),
+        withLatestFrom(state$, (v1, v2) => [v1, v2.financeInfo]),
+        concatMap((d) => {
+            const financeInfoState: FinanceInfoState = d[1];
+            const action = d[0];
+            return from(
+                saveErrorFinanceInfoStatus(
+                    financeInfoState.code,
+                    financeInfoState.termType,
+                    action?.payload?.error?.toString(),
+                ),
+            ).pipe(
+                map(() => {
+                    if (financeInfoState?.msg && financeInfoState?.channel) {
+                        financeInfoState.channel.ack(financeInfoState.msg);
+                    }
+                    return finishSyncsAction();
+                }),
+            );
+        }),
+    ),
+);
+
 export const financeInfoEffects = [
     whenStartSync$,
     requestFinanceInfo$,
     saveFinanceInfo$,
     requestNextPage$,
     whenFinish$,
+    whenRequestError$,
 ];
