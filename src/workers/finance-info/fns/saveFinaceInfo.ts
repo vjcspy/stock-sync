@@ -127,7 +127,8 @@ const getFinanceInfoFieldValue = (
 
     return data &&
         typeof data['Value' + valueIndex] !== 'undefined' &&
-        parseFloat(data['Value' + valueIndex]) < 100000
+        parseFloat(data['Value' + valueIndex]) < 1000000 &&
+        parseFloat(data['Value' + valueIndex]) > -100000
         ? data['Value' + valueIndex]
         : null;
 };
