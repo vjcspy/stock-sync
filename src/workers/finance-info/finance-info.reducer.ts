@@ -1,5 +1,5 @@
 import {createReducer} from '@reduxjs/toolkit';
-import {Message} from 'amqplib/callback_api';
+import {Channel, Message} from 'amqplib/callback_api';
 
 import {
     getFinanceInfoAction,
@@ -11,7 +11,7 @@ export interface FinanceInfoState {
     code?: string;
     lastYear?: number;
     lastQuarter?: number;
-    channel?: any;
+    channel?: Channel;
     msg?: Message;
     page?: number;
     termType: number;

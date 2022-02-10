@@ -1,5 +1,5 @@
 import {combineReducers, Reducer, ReducersMapObject} from 'redux';
-import logger from 'redux-logger';
+// import logger from 'redux-logger';
 import {
     combineEpics,
     createEpicMiddleware,
@@ -10,7 +10,7 @@ import {mergeMap} from 'rxjs/operators';
 
 let epic$: any;
 let rootEpic: any;
-let rootMiddleware: any[] = [logger];
+let rootMiddleware: any[] = [];
 // An array which is used to delete state keys when reducers are removed
 let keysToRemove: string[] = [];
 

@@ -34,7 +34,6 @@ export const logfile = (filePath = 'info', message: string, ...meta: any[]) => {
                     ? `${info.message} | ${stringify(info.metadata, null, 2)}`
                     : `${info.timestamp} | [${info.level}] ${info.message}`,
             ),
-
             // errors(),
             // formatMetadata()
         ),
@@ -42,9 +41,7 @@ export const logfile = (filePath = 'info', message: string, ...meta: any[]) => {
     });
 
     const trans = [
-        // new winston.transports.Console({
-        //     format: combine(colorize(), format.cli()),
-        // }),
+        new winston.transports.Console({}),
 
         new winston.transports.File({
             filename: `logs/${filePath}.log`,

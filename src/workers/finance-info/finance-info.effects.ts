@@ -192,9 +192,24 @@ const requestNextPage$ = createEffect((action$, state$) =>
     ),
 );
 
+const whenFinish$ = createEffect((action$, state$) =>
+    action$.pipe(
+        ofType(getFinanceInfoAfterAction),
+        withLatestFrom(state$, (v1, v2) => [v1, v2.financeInfo]),
+        map((d) => {
+            const financeInfoState: FinanceInfoState = d[1];
+            if (financeInfoState?.msg && financeInfoState?.channel) {
+                financeInfoState.channel.ack(financeInfoState.msg);
+            }
+            return EMPTY;
+        }),
+    ),
+);
+
 export const financeInfoEffects = [
     whenStartSync$,
     requestFinanceInfo$,
     saveFinanceInfo$,
     requestNextPage$,
+    whenFinish$,
 ];
