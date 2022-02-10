@@ -1,4 +1,5 @@
 import {createStoreManager} from '@app/store/createStoreManager';
+import {logActionByCode} from '@app/store/middleware/logActionByCode';
 import {configureStore, createReducer} from '@reduxjs/toolkit';
 
 export const storeManager = createStoreManager(
@@ -12,7 +13,7 @@ export const middleware = () => [];
 
 export const store = configureStore({
     reducer: storeManager.reduce,
-    middleware: storeManager.middleware,
+    middleware: [...storeManager.middleware(), logActionByCode],
     devTools:
         process?.env?.NODE_ENV == 'production' ||
         process?.env?.NEXT_PUBLIC_NODE_ENV == 'production'

@@ -26,7 +26,6 @@ import {
     saveFinanceInfoPageErrorAction,
 } from './finance-info.actions';
 import {FinanceInfoState} from './finance-info.reducer';
-import {financeInfoLog} from './fns/financeInfoLog';
 import {getFinanceInfoStatus} from './fns/getFinanceInfoStatus';
 import {saveFinanceInfo} from './fns/saveFinaceInfo';
 
@@ -37,7 +36,6 @@ const whenStartSync$ = createEffect((action$) => {
             const code = action.payload.msg.content.toString();
             return from(getFinanceInfoStatus(code)).pipe(
                 map((syncStatus) => {
-                    financeInfoLog(code, `getFinanceInfoStatus`, syncStatus);
                     if (syncStatus) {
                         if (syncStatus.termType === 1) {
                             if (parseInt(syncStatus.year) < moment().year()) {

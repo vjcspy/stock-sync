@@ -2,6 +2,8 @@ import * as moment from 'moment';
 import * as winston from 'winston';
 import {format} from 'winston';
 
+const stringify = require('json-stringify-safe');
+
 const {
     combine,
     simple,
@@ -9,7 +11,6 @@ const {
     // errors,
     // cli,
     metadata,
-    colorize,
 } = format;
 
 const addTimeStamp = format((info: any) => {
@@ -28,6 +29,12 @@ export const logfile = (filePath = 'info', message: string, ...meta: any[]) => {
             splat(),
             simple(),
             metadata(),
+            format.printf((info) =>
+                Object.keys(info.metadata).length
+                    ? `${info.message} | ${stringify(info.metadata, null, 2)}`
+                    : `${info.timestamp} | [${info.level}] ${info.message}`,
+            ),
+
             // errors(),
             // formatMetadata()
         ),
@@ -35,9 +42,9 @@ export const logfile = (filePath = 'info', message: string, ...meta: any[]) => {
     });
 
     const trans = [
-        new winston.transports.Console({
-            format: combine(colorize(), format.cli()),
-        }),
+        // new winston.transports.Console({
+        //     format: combine(colorize(), format.cli()),
+        // }),
 
         new winston.transports.File({
             filename: `logs/${filePath}.log`,
