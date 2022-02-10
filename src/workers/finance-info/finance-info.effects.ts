@@ -38,15 +38,21 @@ const whenStartSync$ = createEffect((action$) => {
                 map((syncStatus) => {
                     if (syncStatus) {
                         if (syncStatus.termType === 1) {
-                            if (parseInt(syncStatus.year) < moment().year()) {
+                            if (
+                                parseInt(syncStatus.year) <
+                                moment().year() - 1
+                            ) {
                                 return requestFinanceInfoAction({
                                     code,
                                     page: 5,
                                     lastYear: parseInt(syncStatus.year),
                                 });
                             } else {
-                                return getFinanceInfoAfterAction({
-                                    data: 'not syncs because current year is newest',
+                                // Vẫn lấy page đầu tiên trong trường hợp có update (Chưa kiểm toán, kiểm toán)
+                                return requestFinanceInfoAction({
+                                    code,
+                                    page: 1,
+                                    lastYear: moment().year() - 2,
                                 });
                             }
                         } else {
@@ -108,10 +114,8 @@ const requestFinanceInfo$ = createEffect((action$, state$) =>
                                 });
                             } else {
                                 if (data[0].length === 0) {
-                                    return requestFinanceInfoErrorAction({
-                                        error: new Error(
-                                            'finance info data invalid',
-                                        ),
+                                    return getFinanceInfoAfterAction({
+                                        data: 'Không có dữ liệu kể cả mới nhất',
                                     });
                                 } else {
                                     return getFinanceInfoAfterAction({
@@ -132,7 +136,6 @@ const requestFinanceInfo$ = createEffect((action$, state$) =>
                             error: new Error('finance info data invalid'),
                         });
                     }
-                    return EMPTY;
                 }),
             );
         }),
