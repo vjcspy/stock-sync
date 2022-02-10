@@ -32,7 +32,7 @@ export const saveFinanceInfo = async (code: string, data: any) => {
                 year: _.last(financeInfos)['year'],
                 quarter: _.last(financeInfos)['quarter'],
             },
-            ['code'],
+            ['code', 'termType'],
         );
 
         // commit transaction now:
@@ -125,7 +125,9 @@ const getFinanceInfoFieldValue = (
 ) => {
     const data = _.find(financeInfoData, (value) => value?.ID == id);
 
-    return data && typeof data['Value' + valueIndex] !== 'undefined'
+    return data &&
+        typeof data['Value' + valueIndex] !== 'undefined' &&
+        parseFloat(data['Value' + valueIndex]) < 100000
         ? data['Value' + valueIndex]
         : null;
 };

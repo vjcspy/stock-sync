@@ -2,6 +2,7 @@ import {createReducer} from '@reduxjs/toolkit';
 import {Channel, Message} from 'amqplib/callback_api';
 
 import {
+    finishSyncsAction,
     getFinanceInfoAction,
     requestFinanceInfoAction,
     saveFinanceInfoPageAfterAction,
@@ -46,6 +47,9 @@ export const financeInfoReducer = createReducer(
                 if (action.payload.lastQuarter) {
                     state.lastQuarter = action.payload.lastQuarter;
                 }
+            })
+            .addCase(finishSyncsAction, () => {
+                return FinanceInfoReducerFactory();
             });
     },
 );

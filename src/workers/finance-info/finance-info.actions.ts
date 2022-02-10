@@ -3,7 +3,7 @@ import {Message} from 'amqplib/callback_api';
 
 const prefix = '$%FINANCE_INFO$%';
 
-const GET_FINANCE_INFO = 'START_GET_FINANCE_INFO';
+const GET_FINANCE_INFO = 'SYNC_FINANCE_INFO';
 const getFinanceInfo = generateAction<
     {channel: any; msg: Message; termType?: number},
     {
@@ -42,3 +42,6 @@ const saveFinanceInfoPage = generateAction<
 >('SAVE_FINANCE_INFO_PAGE', prefix);
 export const saveFinanceInfoPageAfterAction = saveFinanceInfoPage.AFTER;
 export const saveFinanceInfoPageErrorAction = saveFinanceInfoPage.ERROR;
+
+const finishSyncs = generateAction('FINISH_SYNCS', prefix);
+export const finishSyncsAction = finishSyncs.ACTION;

@@ -17,6 +17,7 @@ import {
 } from 'rxjs';
 
 import {
+    finishSyncsAction,
     getFinanceInfoAction,
     getFinanceInfoAfterAction,
     requestFinanceInfoAction,
@@ -204,7 +205,7 @@ const whenFinish$ = createEffect((action$, state$) =>
             if (financeInfoState?.msg && financeInfoState?.channel) {
                 financeInfoState.channel.ack(financeInfoState.msg);
             }
-            return EMPTY;
+            return finishSyncsAction({});
         }),
     ),
 );
