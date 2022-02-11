@@ -29,7 +29,7 @@ export const financeInfoReducer = createReducer(
             .addCase(getFinanceInfoAction, (state, action) => {
                 state.channel = action.payload.channel;
                 state.msg = action.payload.msg;
-                state.termType = 1;
+                state.termType = action.payload.termType;
             })
             .addCase(requestFinanceInfoAction, (state, action) => {
                 state.page = action.payload.page;

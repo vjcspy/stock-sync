@@ -36,7 +36,9 @@ const whenStartSync$ = createEffect((action$) => {
         ofType(getFinanceInfoAction),
         switchMap((action) => {
             const code = action.payload.msg.content.toString();
-            return from(getFinanceInfoStatus(code)).pipe(
+            return from(
+                getFinanceInfoStatus(code, action.payload.termType),
+            ).pipe(
                 map((syncStatus) => {
                     if (syncStatus) {
                         if (syncStatus.termType === 1) {
@@ -58,12 +60,28 @@ const whenStartSync$ = createEffect((action$) => {
                                 });
                             }
                         } else {
-                            // TODO: trường hợp sync quarter
+                            if (
+                                parseInt(syncStatus.year) <
+                                moment().year() - 1
+                            ) {
+                                return requestFinanceInfoAction({
+                                    code,
+                                    page: 8,
+                                    lastYear: parseInt(syncStatus.year),
+                                });
+                            } else {
+                                // Vẫn lấy page đầu tiên trong trường hợp có update (Chưa kiểm toán, kiểm toán)
+                                return requestFinanceInfoAction({
+                                    code,
+                                    page: 2,
+                                    lastYear: moment().year() - 2,
+                                });
+                            }
                         }
                     } else {
                         return requestFinanceInfoAction({
                             code,
-                            page: 5,
+                            page: action.payload.termType === 1 ? 5 : 8,
                         });
                     }
                     return EMPTY;
@@ -101,7 +119,7 @@ const requestFinanceInfo$ = createEffect((action$, state$) =>
                         ) {
                             times = _.filter(times, (time) => {
                                 return (
-                                    time.YearPeriod > financeInfoState.lastYear
+                                    time.YearPeriod >= financeInfoState.lastYear
                                 );
                             });
                         } else {
@@ -159,7 +177,11 @@ const saveFinanceInfo$ = createEffect((action$) =>
         ofType(requestFinanceInfoAfterAction),
         concatMap((action) => {
             return from(
-                saveFinanceInfo(action.payload.code, action.payload.data),
+                saveFinanceInfo(
+                    action.payload.code,
+                    action.payload.data,
+                    action.payload.termType,
+                ),
             ).pipe(
                 map((saveSuccess) => {
                     if (saveSuccess?.success === true) {

@@ -1,9 +1,14 @@
 import {FinancialIndicators} from '@entity/FinancialIndicators';
 import {FinancialIndicatorStatus} from '@entity/FinancialIndicatorStatus';
 import * as _ from 'lodash';
+import {parseInt} from 'lodash';
 import {getConnection} from 'typeorm';
 
-export const saveFinanceInfo = async (code: string, data: any) => {
+export const saveFinanceInfo = async (
+    code: string,
+    data: any,
+    termType: number,
+) => {
     let syncSuccess: any = 0;
 
     const connection = getConnection();
@@ -18,6 +23,7 @@ export const saveFinanceInfo = async (code: string, data: any) => {
             code,
             data[0],
             data[1]['Chỉ số tài chính'],
+            termType,
         );
         await queryRunner.manager.upsert(FinancialIndicators, financeInfos, [
             'code',
@@ -28,11 +34,13 @@ export const saveFinanceInfo = async (code: string, data: any) => {
             FinancialIndicatorStatus,
             {
                 code,
-                termType: financeInfos[0]['termType'],
+                termType: termType,
                 year: _.last(financeInfos)['year'],
                 quarter: _.last(financeInfos)['quarter'],
             },
-            ['code', 'termType'],
+            {
+                conflictPaths: ['code', 'termType'],
+            },
         );
 
         // commit transaction now:
@@ -62,14 +70,26 @@ const parseFinanceInfoData = (
     code: string,
     timeData: any[],
     financeInfoData: any[],
+    termType: number,
 ) => {
     const data: any[] = [];
     timeData.forEach((time, index) => {
+        if (time?.ReportTermID === 2) {
+            if (
+                typeof time.TermCode !== 'string' &&
+                time.TermCode.length !== 2
+            ) {
+                throw new Error('termType = 2 mà termCode data invalid');
+            }
+        }
         const financeInfoObject = {
             code,
-            quarter: time?.ReportTermID == 1 ? null : 1,
+            quarter:
+                time?.ReportTermID == 1
+                    ? null
+                    : parseInt(time.TermCode.substr(1)),
             year: time.YearPeriod,
-            termType: time.ReportTermID,
+            termType,
             periodBegin: time.PeriodBegin,
             periodEnd: time.PeriodEnd,
             united: time.United,
@@ -128,7 +148,7 @@ const getFinanceInfoFieldValue = (
     return data &&
         typeof data['Value' + valueIndex] !== 'undefined' &&
         parseFloat(data['Value' + valueIndex]) < 1000000 &&
-        parseFloat(data['Value' + valueIndex]) > -100000
+        parseFloat(data['Value' + valueIndex]) > -1000000
         ? data['Value' + valueIndex]
         : null;
 };
