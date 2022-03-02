@@ -1,7 +1,7 @@
 export interface SyncCorState {
-  page?: number;
+    page?: number;
 }
 
 export const SyncCorStateFactory = (): SyncCorState => ({
-  page: 0
+    page: 0,
 });

@@ -1,9 +1,13 @@
-import { createReducer } from '@reduxjs/toolkit';
-import { SyncCorStateFactory } from './sync-cor.state';
-import { corGetNextPageAfterAction } from './sync-cor.actions';
+import {createReducer} from '@reduxjs/toolkit';
 
-export const syncCorReducer = createReducer(SyncCorStateFactory(), builder => {
-  builder.addCase(corGetNextPageAfterAction, (state) => {
-    state.page = state.page + 1;
-  });
-});
+import {corGetNextPageAfterAction} from './sync-cor.actions';
+import {SyncCorStateFactory} from './sync-cor.state';
+
+export const syncCorReducer = createReducer(
+    SyncCorStateFactory(),
+    (builder) => {
+        builder.addCase(corGetNextPageAfterAction, (state) => {
+            state.page = state.page + 1;
+        });
+    },
+);

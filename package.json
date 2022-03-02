@@ -33,7 +33,7 @@
     "prebuild": "npm run lint",
     "build": "ttsc -p tsconfig.release.json",
     "watch": "ttsc -w -p tsconfig.release.json",
-    "lint": "eslint . --ext .ts,.tsx",
+    "lint": "eslint src --ext .ts,.tsx --fix",
     "test": "jest --coverage",
     "test:watch": "jest --watch"
   },

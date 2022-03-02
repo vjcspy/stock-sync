@@ -1,3 +1,3 @@
-export class StockPricesValues{
-  static START_YEAR = 2016;
+export class StockPricesValues {
+    static START_YEAR = 2016;
 }

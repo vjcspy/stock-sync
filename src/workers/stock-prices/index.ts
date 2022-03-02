@@ -1,3 +1,3 @@
-import {syncStock} from "./sync";
+import {syncStock} from './sync';
 
 syncStock();

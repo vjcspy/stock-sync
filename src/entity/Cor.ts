@@ -1,64 +1,63 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import {Column, Entity, PrimaryGeneratedColumn} from 'typeorm';
 
 @Entity()
 export class Cor {
+    @PrimaryGeneratedColumn()
+    id: number;
 
-  @PrimaryGeneratedColumn()
-  id: number;
+    @Column()
+    refId: number;
 
-  @Column()
-  refId: number;
+    @Column()
+    catId: number;
 
-  @Column()
-  catId: number;
+    @Column({unique: true})
+    code: string;
 
-  @Column({ unique: true })
-  code: string;
+    @Column()
+    exchange: string;
 
-  @Column()
-  exchange: string;
+    @Column()
+    industryName1: string;
 
-  @Column()
-  industryName1: string;
+    @Column()
+    industryName2: string;
 
-  @Column()
-  industryName2: string;
+    @Column()
+    industryName3: string;
 
-  @Column()
-  industryName3: string;
+    @Column({
+        type: 'bigint',
+    })
+    totalShares: number;
 
-  @Column({
-    type: 'bigint',
-  })
-  totalShares: number;
+    @Column()
+    name: string;
 
-  @Column()
-  name: string;
+    @Column({
+        type: 'date',
+        nullable: true,
+    })
+    firstTradeDate: Date;
 
-  @Column({
-    type: 'date',
-    nullable: true,
-  })
-  firstTradeDate: Date;
-
-  static convertToCorObject(vsData: any) {
-    let firstTradeDate = null;
-    const reTime = new RegExp('(/Date\\()(.*)(\\)/)');
-    const _r: any = reTime.exec(vsData['FirstTradeDate']);
-    if (_r.length === 4 && !isNaN(_r[2])) {
-      firstTradeDate = new Date(parseInt(_r[2]));
+    static convertToCorObject(vsData: any) {
+        let firstTradeDate = null;
+        const reTime = new RegExp('(/Date\\()(.*)(\\)/)');
+        const _r: any = reTime.exec(vsData['FirstTradeDate']);
+        if (_r.length === 4 && !isNaN(_r[2])) {
+            firstTradeDate = new Date(parseInt(_r[2]));
+        }
+        return {
+            refId: vsData['ID'],
+            catId: vsData['CatID'],
+            code: vsData['Code'],
+            exchange: vsData['Exchange'],
+            industryName1: vsData['IndustryName1'],
+            industryName2: vsData['IndustryName2'],
+            industryName3: vsData['IndustryName3'],
+            name: vsData['Name'],
+            totalShares: vsData['TotalShares'],
+            firstTradeDate: firstTradeDate,
+        };
     }
-    return {
-      refId: vsData['ID'],
-      catId: vsData['CatID'],
-      code: vsData['Code'],
-      exchange: vsData['Exchange'],
-      industryName1: vsData['IndustryName1'],
-      industryName2: vsData['IndustryName2'],
-      industryName3: vsData['IndustryName3'],
-      name: vsData['Name'],
-      totalShares: vsData['TotalShares'],
-      firstTradeDate: firstTradeDate,
-    };
-  }
 }
